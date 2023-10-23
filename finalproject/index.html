@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casey's Weather App</title>
-    <script src="main.js"></script>
+    <script src="main.js" type="module"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Casey's Weather App</h1>
-    <p>Hello! This is my weather app that I made that pulls the weather data from an API for my Web Dev 2 class</p>
+    <h3>Description</h3>
+    <p>Hello everyone! This is my weather app that I made that pulls the weather data from an API for my Web Dev 2 class</p>
+    <h3>How to use</h3>
+    <p>In order to get the weather data, you must provide in the text box a: zipcode, city, state, country, or latitude and longitude(ie: 0, 0)</p>
+    <input id="param" type="text" placeholder="Enter paramater here" required>
+    <button id="get-weather-button">Get Weather Data</button>
+    <div id="output"></div>
 </body>
 </html>
