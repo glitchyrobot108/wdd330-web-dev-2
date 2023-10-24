@@ -1,13 +1,89 @@
-// function renderOutputData(data, output_e){
-//     //Location
-//     const location = data.location
-//     let location_header_e = document.createElement("h2")
-//     location_header_e.innerHTML = `${location.name}, ${location.region}, ${location.country}`
-//     output_e.appendChild(location_header_e)
-//     let location_coords_e = document.createElement("p")
-//     location_coords_e.innerHTML = `Latitude, Longitude : ${location.lat}, ${location.lon}`
-//     output_e.appendChild(location_coords_e)
-// }
+//Global variables
+let days_list;
+let temp_type = "f"
+let speed_type = "mph"
+
+//Limit date input
+let d_min = new Date()
+console.log(d_min)
+d_min.setDate(d_min.getDate() - 1)
+console.log(d_min)
+let d_max = new Date()
+console.log(d_max)
+d_max.setDate(d_max.getDate() + 15)
+console.log(d_max)
+let d_min_date = ("0" + d_min.getDate()).slice(-2)
+let d_max_date = ("0" + d_max.getDate()).slice(-2)
+d_min = `${d_min.getFullYear()}-${d_min.getMonth()+1}-${d_min_date}`
+d_max = `${d_max.getFullYear()}-${d_max.getMonth()+1}-${d_max_date}`
+console.log(d_min)
+console.log(d_max)
+document.querySelector("#dt").setAttribute("min", d_min)
+document.querySelector("#dt").setAttribute("max", d_max)
+
+function toggleTemp(){
+    let nodes_max = document.querySelector("#output").querySelectorAll("#max_temp")
+    let nodes_min = document.querySelector("#output").querySelectorAll("#min_temp")
+    switch(temp_type){
+    case "f":
+        temp_type = "c"
+        nodes_max.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let temp_c = days_list[list_position].day.maxtemp_c
+            element.innerHTML = `High of ${temp_c}C°`
+        })
+        nodes_min.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let temp_c = days_list[list_position].day.mintemp_c
+            element.innerHTML = `Low of ${temp_c}C°`
+        })
+        break
+    case "c":
+        temp_type = "f"
+        nodes_max.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let temp_f = days_list[list_position].day.maxtemp_f
+            element.innerHTML = `High of ${temp_f}F°`
+        })
+        nodes_min.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let temp_f = days_list[list_position].day.mintemp_f
+            element.innerHTML = `Low of ${temp_f}F°`
+        })
+        break
+   }
+}
+
+function toggleSpeed(){
+    let nodes = document.querySelector("#output").querySelectorAll("#max_wind")
+    switch(speed_type){
+    case "mph":
+        speed_type = "kph"
+        nodes.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let spd_kph = days_list[list_position].day.maxwind_kph
+            element.innerHTML = `Max Wind Speed ${spd_kph}kph`
+        })
+        break
+    case "kph":
+        speed_type = "mph"
+        nodes.forEach((element)=>{
+            let parent = element.parentElement
+            let list_position = parent.getAttribute("list_position")
+            let spd_mph = days_list[list_position].day.maxwind_mph
+            element.innerHTML = `Max Wind Speed ${spd_mph}mph`
+        })
+        break
+   }
+}
+
+document.querySelector("#toggle_temp").addEventListener("click", toggleTemp)
+document.querySelector("#toggle_speed").addEventListener("click", toggleSpeed)
 
 function getDayName(day){
     let y = day.slice(0, 4)
@@ -41,16 +117,16 @@ function getDayName(day){
     return day_name
 }
 
-function dayTemplate(day){
+function dayTemplate(day, position){
     let day_name = getDayName(day.date)
     let html = 
-    `<div id="day">
+    `<div id="day" list_position="${position}">
         <img src="${day.day.condition.icon}" alt="Image of ${day.day.condition.text}">
         <p id="condition">${day.day.condition.text}</p>
         <p id="date">${day.date}</p>
         <p id="day_name">${day_name}</p>
-        <p id="max_temp">High of ${day.day.maxtemp_f}F</p>
-        <p id="min_temp">Low of ${day.day.mintemp_f}F</p>
+        <p id="max_temp">High of ${day.day.maxtemp_f}F°</p>
+        <p id="min_temp">Low of ${day.day.mintemp_f}F°</p>
         <p id="humidty">Avg. Humidty ${day.day.avghumidity}%</p>
         <p id="max_wind">Max Wind Speed ${day.day.maxwind_mph}mph</p>
         <p id="rain_chance">Rain Chance ${day.day.daily_chance_of_rain}%</p>
@@ -61,29 +137,34 @@ function dayTemplate(day){
 
 function renderOutputData(data, output_e){
     let html = ""
-    let days = data.forecast.forecastday
-    localStorage.setItem("days", Array(days))
-    console.log(days)
-    days.forEach(element => {
-        html += dayTemplate(element)
+    let position = 0
+    days_list = data.forecast.forecastday
+    console.log(days_list)
+    days_list.forEach(element => {
+        html += dayTemplate(element, position)
+        position += 1
     });
     output_e.insertAdjacentHTML("beforeend", html)
 }
 
 async function getWeatherData(){
-    //Get output element
-    const output_e = document.querySelector("#output")
-    output_e.innerHTML = ""
-
     //Get paramater
-    let location = document.querySelector("#param").value
-    let days = document.querySelector("#days").value
+    let paramaters = {
+        location: document.querySelector("#param").value,
+        days: document.querySelector("#days").value,
+        dt: document.querySelector("#dt").value
+    }
     if(!location){
         alert("Please enter a parameter into the text box")
         return
     }
 
-    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${location}&days=${days}`;
+    //Get output element
+    const output_e = document.querySelector("#output")
+    output_e.innerHTML = ""
+
+    //Fetch info
+    let url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${paramaters.location}&days=${paramaters.days}&dt=${paramaters.dt}`;
     const options = {
         method: 'GET',
         headers: {
@@ -95,7 +176,6 @@ async function getWeatherData(){
         const response = await fetch(url, options);
         const result = await response.json();
         renderOutputData(result, output_e)
-        // console.log(result)
     } catch (error) {
         console.error(error);
     }
