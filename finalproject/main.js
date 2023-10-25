@@ -115,10 +115,11 @@ function dayTemplate(day, position){
 }
 
 function renderOutputData(data, output_e){
-    let html = ""
+    document.querySelector("#location").innerHTML = `${data.location.name}, ${data.location.region}, ${data.location.country}`
+    let html = ``
     let position = 0
     days_list = data.forecast.forecastday
-    console.log(days_list)
+    console.log(data)
     days_list.forEach(element => {
         html += dayTemplate(element, position)
         position += 1
