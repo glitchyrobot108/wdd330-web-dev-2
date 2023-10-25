@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript Geolocation</h2>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="showLocation()">Try It</button>
+<img id="static-map" src="" alt="">
+
+<script>
+let key = "AIzaSyBbg42iLUpjO-LhEuaNLgP2A-bwibzqdQA"
+let map = document.querySelector("#static-map")
+let position;
+
+function showLocation(){
+    getLocation()
+}
+
+function getLocation() {
+    navigator.geolocation.getCurrentPosition((obj) => {
+        position = obj.coords
+        let params = `center=${position.latitude},${position.longitude}&zoom=11&size=600x300&maptype=roadmap&key=${key}`
+        map.src = `https://maps.googleapis.com/maps/api/staticmap?${params}`
+    })
+}
+</script>
+</body>
+</html>
