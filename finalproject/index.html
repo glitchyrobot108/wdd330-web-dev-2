@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casey's Weather App</title>
+    <title>3-Day Weather Forecast</title>
     <script src="main.js" type="module"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Casey's Weather App</h1>
-    <h3>Description</h3>
-    <p>Hello! This is my weather app that I made that pulls the weather data from an API for my Web Dev 2 class</p>
-    <h3>How to use</h3>
-    <p>In order to get the weather data, you must provide in the text box one of the following: zipcode, city, state, country, or latitude and longitude(ie: 0, 0)</p>
-    <input id="param" type="text" placeholder="Enter location parameter here" required>
-    <input id="days" type="number" required value="1" min="1" max="3">
-    <input  id="dt" type="date">
-    <button id="get-weather-button">Get Weather Data</button>
-    <button id="toggle_temp">Toggle Temp</button>
-    <button id="toggle_speed">Toggle Speed</button>
+    <header>
+        <h1>3-Day Weather Forecast</h1>
+        <h3>Description</h3>
+        <p>Hello! This is my weather app that I made that pulls the weather data from an API for my Web Dev 2 class</p>
+        <p><a href="https://rapidapi.com/weatherapi/api/weatherapi-com">WeatherAPI.com info here</a></p>
+        <h3>How to use</h3>
+        <p>In order to get the weather data, you must provide in the text box one of the following: a zipcode, a city, a country, or a latitude and longitude(e.g.: 0, 0)</p>
+    </header>
+    <div id="inputs">
+        <input id="param" type="text" placeholder="Enter location">
+        <button id="get-weather-button">Get Weather Data</button>
+        <button id="toggle_temp">Toggle Temp</button>
+        <button id="toggle_speed">Toggle Speed</button>
+    </div>
+    <br>
     <div id="output">
     </div>
 </body>

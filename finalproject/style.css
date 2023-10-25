@@ -1,0 +1,67 @@
+body{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header{
+    font-size: large;
+}
+
+#inputs{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(1fr, 3);
+    text-align: center;
+    font-size: larger;
+}
+
+#inputs input, button{
+    height: 100px;
+    font-size: xx-large;
+}
+
+#inputs #param{
+    border-radius: 5%;
+    width: 300px;
+}
+
+#output{
+    display: flex;
+}
+
+#day{
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    border: 0.2rem solid hsl(235, 78%, 23%);
+    border-radius: 5%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#day p {
+    grid-column: 1;
+    margin-left: 15%;
+}
+
+#day img{
+    border: black dotted 2px;
+    border-radius: 100%;
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: 2;
+}
+
+#day #date, #day #day_name{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: 2;
+}
+
+#day p{
+    font-weight: bold;
+}

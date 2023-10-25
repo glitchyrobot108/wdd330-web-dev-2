@@ -3,24 +3,6 @@ let days_list;
 let temp_type = "f"
 let speed_type = "mph"
 
-//Limit date input
-let d_min = new Date()
-console.log(d_min)
-d_min.setDate(d_min.getDate() - 1)
-console.log(d_min)
-let d_max = new Date()
-console.log(d_max)
-d_max.setDate(d_max.getDate() + 15)
-console.log(d_max)
-let d_min_date = ("0" + d_min.getDate()).slice(-2)
-let d_max_date = ("0" + d_max.getDate()).slice(-2)
-d_min = `${d_min.getFullYear()}-${d_min.getMonth()+1}-${d_min_date}`
-d_max = `${d_max.getFullYear()}-${d_max.getMonth()+1}-${d_max_date}`
-console.log(d_min)
-console.log(d_max)
-document.querySelector("#dt").setAttribute("min", d_min)
-document.querySelector("#dt").setAttribute("max", d_max)
-
 function toggleTemp(){
     let nodes_max = document.querySelector("#output").querySelectorAll("#max_temp")
     let nodes_min = document.querySelector("#output").querySelectorAll("#min_temp")
@@ -82,9 +64,6 @@ function toggleSpeed(){
    }
 }
 
-document.querySelector("#toggle_temp").addEventListener("click", toggleTemp)
-document.querySelector("#toggle_speed").addEventListener("click", toggleSpeed)
-
 function getDayName(day){
     let y = day.slice(0, 4)
     let m = day.slice(5, 7)
@@ -121,10 +100,10 @@ function dayTemplate(day, position){
     let day_name = getDayName(day.date)
     let html = 
     `<div id="day" list_position="${position}">
-        <img src="${day.day.condition.icon}" alt="Image of ${day.day.condition.text}">
-        <p id="condition">${day.day.condition.text}</p>
         <p id="date">${day.date}</p>
         <p id="day_name">${day_name}</p>
+        <img src="${day.day.condition.icon}" alt="Image of ${day.day.condition.text}">
+        <p id="condition">${day.day.condition.text}</p>
         <p id="max_temp">High of ${day.day.maxtemp_f}F°</p>
         <p id="min_temp">Low of ${day.day.mintemp_f}F°</p>
         <p id="humidty">Avg. Humidty ${day.day.avghumidity}%</p>
@@ -151,10 +130,11 @@ async function getWeatherData(){
     //Get paramater
     let paramaters = {
         location: document.querySelector("#param").value,
-        days: document.querySelector("#days").value,
-        dt: document.querySelector("#dt").value
+        days: 3,
+        // days: document.querySelector("#days").value,
+        // dt: document.querySelector("#dt").value
     }
-    if(!location){
+    if(!paramaters.location){
         alert("Please enter a parameter into the text box")
         return
     }
@@ -181,5 +161,7 @@ async function getWeatherData(){
     }
 }
 
-//Listen for button click
+//Listen for button clicks
 document.querySelector("#get-weather-button").addEventListener("click", getWeatherData)
+document.querySelector("#toggle_temp").addEventListener("click", toggleTemp)
+document.querySelector("#toggle_speed").addEventListener("click", toggleSpeed)
